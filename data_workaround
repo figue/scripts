@@ -1,0 +1,41 @@
+#!/system/bin/sh
+
+log "Starting script $0 to workaround annoying data bug in some phone carriers..."
+
+mkdir -p /sdcard/tmp
+STATUS=/sdcard/tmp/status
+
+while true ; do
+
+   if ip a sh dev wlan0 | grep -q inet ; then
+
+      log "$0 :: Wifi is active and has an IP address"
+      echo wifi > $STATUS
+
+   else
+
+      if ip a sh dev rmnet_usb0 | grep -q inet || grep -q data $STATUS ; then
+
+         log "$0 :: Data is already active"
+
+      else
+
+         ##am start -n com.android.settings/.TestingSettings
+         #am start -n com.android.settings/.RadioInfo
+         service call phone 20 &
+         sleep 30
+         kill $(busybox ps www | grep "service call phone 20" | grep -v grep | awk '{print $1}')
+         #am force-stop com.android.settings/.RadioInfo
+         ##input keyevent 4
+         sleep 60
+
+      fi
+
+      # Set data status. With this we will only reset 1 time phone connection
+      echo data > $STATUS
+
+   fi
+
+   sleep 15
+
+done
