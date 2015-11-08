@@ -36,7 +36,7 @@ zip_file="${1%.zip}-reduced.zip"
 if unzip -z "$1" | grep -qi BaNkS-dynamic-gapps ; then
     echo "BaNkS dynamic gapps detected!"
 else
-    echo "BaNkS zip not detected... Execute this script with BaNkS-dynamic-gapps-L-X-X-X.zip as the first parameter."
+    echo "BaNkS zip not detected... Execute this script with BaNkS-Dynamic-GApps-6.x.x-XX-XX-XX.zip as the first parameter."
     exit 1
 fi
 
